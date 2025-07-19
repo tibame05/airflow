@@ -56,10 +56,12 @@ services:
     depends_on:
       - initdb  # 等待資料庫初始化
     restart: always  # 永遠重新啟動（即使正常退出也重啟）
+    environment:
+      - AIRFLOW__WEBSERVER__WEB_SERVER_NAME=airflow
+      - AIRFLOW__WEBSERVER__INSTANCE_NAME=airflow
+      - TZ=Asia/Taipei
     ports:
       - 5000:5000  # 對外開放 5000 port
-    environment:
-      - TZ=Asia/Taipei  # 設定時區
     deploy:
       mode: replicated
       replicas: 1
@@ -87,13 +89,15 @@ services:
   
   # Airflow 排程器，負責執行 DAG 任務
   scheduler:
-    image: linsamtw/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+    image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
     hostname: "airflow-scheduler"
     command: pipenv run airflow scheduler  # 啟動 scheduler
     depends_on:
       - initdb
     restart: always
     environment:
+      - AIRFLOW__WEBSERVER__WEB_SERVER_NAME=airflow
+      - AIRFLOW__WEBSERVER__INSTANCE_NAME=airflow
       - TZ=Asia/Taipei
     # 將容器內的 docker 與容器外的 docker 做連結
     volumes:
@@ -107,9 +111,13 @@ services:
       - my_swarm_network
 
   worker:
-    image: linsamtw/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+    image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
     hostname: "{{.Service.Name}}.{{.Task.Slot}}"
     restart: always
+    environment:
+      - AIRFLOW__WEBSERVER__WEB_SERVER_NAME=airflow
+      - AIRFLOW__WEBSERVER__INSTANCE_NAME=airflow
+      - TZ=Asia/Taipei
     # 將容器內的 docker 與容器外的 docker 做連結
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -126,9 +134,13 @@ services:
         - my_swarm_network
 
   crawler_twse:
-    image: linsamtw/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+    image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
     hostname: "{{.Service.Name}}.{{.Task.Slot}}"
     restart: always
+    environment:
+      - AIRFLOW__WEBSERVER__WEB_SERVER_NAME=airflow
+      - AIRFLOW__WEBSERVER__INSTANCE_NAME=airflow
+      - TZ=Asia/Taipei
     # 將容器內的 docker 與容器外的 docker 做連結
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -145,9 +157,13 @@ services:
         - my_swarm_network
 
   crawler_tpex:
-    image: linsamtw/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+    image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
     hostname: "{{.Service.Name}}.{{.Task.Slot}}"
     restart: always
+    environment:
+      - AIRFLOW__WEBSERVER__WEB_SERVER_NAME=airflow
+      - AIRFLOW__WEBSERVER__INSTANCE_NAME=airflow
+      - TZ=Asia/Taipei
     # 將容器內的 docker 與容器外的 docker 做連結
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
