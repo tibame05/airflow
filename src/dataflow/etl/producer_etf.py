@@ -24,9 +24,9 @@ def create_producer_task_tw() -> DockerOperator:
 def create_producer_task_us() -> DockerOperator:
     return DockerOperator(
         # 設定這個 task 在 DAG 中的名稱（唯一識別碼）
-        task_id="producer_main_tw",
+        task_id="producer_main_us",
         image="tibame05/tibame_crawler:0.0.5",
-        command="pipenv run python crawler/producer_main_tw.py",
+        command="pipenv run python crawler/producer_main_us.py",
         # 每次執行前都強制重新拉取最新的 image（確保使用最新版本）
         force_pull=True,
         # 容器執行完畢後自動刪除（避免堆積殘留容器）
