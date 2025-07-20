@@ -87,7 +87,7 @@ services:
   
   # Airflow 排程器，負責執行 DAG 任務
   scheduler:
-    image: linsamtw/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+    image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
     hostname: "airflow-scheduler"
     command: pipenv run airflow scheduler  # 啟動 scheduler
     depends_on:
@@ -107,7 +107,7 @@ services:
       - my_swarm_network
 
   worker:
-    image: linsamtw/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+    image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
     hostname: "{{.Service.Name}}.{{.Task.Slot}}"
     restart: always
     # 將容器內的 docker 與容器外的 docker 做連結
@@ -126,7 +126,7 @@ services:
         - my_swarm_network
 
   crawler_twse:
-    image: linsamtw/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+    image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
     hostname: "{{.Service.Name}}.{{.Task.Slot}}"
     restart: always
     # 將容器內的 docker 與容器外的 docker 做連結
@@ -145,7 +145,7 @@ services:
         - my_swarm_network
 
   crawler_tpex:
-    image: linsamtw/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+    image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
     hostname: "{{.Service.Name}}.{{.Task.Slot}}"
     restart: always
     # 將容器內的 docker 與容器外的 docker 做連結
