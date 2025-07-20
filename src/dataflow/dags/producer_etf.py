@@ -32,3 +32,4 @@ with airflow.DAG(
     # 建立並註冊 DockerOperator 任務到 DAG
     create_producer_task_tw()
     create_producer_task_us()
+    create_producer_task_tw >> create_producer_task_us
