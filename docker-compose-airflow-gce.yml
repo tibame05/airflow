@@ -12,7 +12,7 @@ services:
       placement:
         constraints: [node.labels.airflow == true]  # 僅部署在標記為 airflow 的節點
     networks:
-      - my_swarm_network  # 使用外部 swarm 網路
+      - etf_lib_network  # 使用外部 swarm 網路
 
   # 建立 Airflow 使用者
   create-user:
@@ -27,7 +27,7 @@ services:
       placement:
         constraints: [node.labels.airflow == true]
     networks:
-      - my_swarm_network
+      - etf_lib_network
 
 
   redis:
@@ -46,7 +46,7 @@ services:
       placement:
         constraints: [node.labels.airflow == true]
     networks:
-        - my_swarm_network
+        - etf_lib_network
 
   # Airflow Web UI 介面
   webserver:
@@ -68,7 +68,7 @@ services:
       placement:
         constraints: [node.labels.airflow == true]
     networks:
-      - my_swarm_network
+      - etf_lib_network
 
   flower:
     image: mher/flower:0.9.5
@@ -85,7 +85,7 @@ services:
       placement:
         constraints: [node.labels.airflow == true]
     networks:
-        - my_swarm_network
+        - etf_lib_network
   
   # Airflow 排程器，負責執行 DAG 任務
   scheduler:
@@ -108,7 +108,7 @@ services:
       placement:
         constraints: [node.labels.airflow == true]
     networks:
-      - my_swarm_network
+      - etf_lib_network
 
   worker:
     image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
@@ -131,7 +131,7 @@ services:
       placement:
         constraints: [node.labels.worker == true]
     networks:
-        - my_swarm_network
+        - etf_lib_network
 
   crawler_twse:
     image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
@@ -154,7 +154,7 @@ services:
       placement:
         constraints: [node.labels.airflow == true]
     networks:
-        - my_swarm_network
+        - etf_lib_network
 
   crawler_tpex:
     image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
@@ -177,11 +177,11 @@ services:
       placement:
         constraints: [node.labels.airflow == true]
     networks:
-        - my_swarm_network
+        - etf_lib_network
 
 # 使用外部已建立好的 Docker Swarm 網路
 networks:
-  my_swarm_network:
+  etf_lib_network:
     external: true
 
 volumes:
