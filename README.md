@@ -39,6 +39,7 @@
     docker build -f with.env.Dockerfile -t tibame05/tibame_dataflow:0.0.5 .
     docker build -f with.env.Dockerfile -t tibame05/tibame_dataflow:0.0.5.arm64 .
     docker build -f gce.with.env.Dockerfile -t tibame05/tibame_dataflow:0.0.6.gce .
+    docker build -f with.env.Dockerfile -t tibame05/tibame_dataflow:0.0.7 .
 
 #### push docker image
 
@@ -46,13 +47,14 @@
     docker push tibame05/tibame_dataflow:0.0.1.arm64
     docker push tibame05/tibame_dataflow:0.0.2
     docker push tibame05/tibame_dataflow:0.0.2.arm64
-    docker push tibame05/tibame_dataflow:0.0.3
+    docker push linsamtw/tibame_dataflow:0.0.3
     docker push tibame05/tibame_dataflow:0.0.3.arm64
     docker push tibame05/tibame_dataflow:0.0.4
     docker push tibame05/tibame_dataflow:0.0.4.arm64
     docker push tibame05/tibame_dataflow:0.0.5
     docker push tibame05/tibame_dataflow:0.0.5.arm64
     docker push tibame05/tibame_dataflow:0.0.6.gce
+    docker push tibame05/tibame_dataflow:0.0.7
 
 #### pull docker image
 
@@ -71,6 +73,7 @@
 	DOCKER_IMAGE_VERSION=0.0.5 docker stack deploy --with-registry-auth -c docker-compose-airflow.yml airflow
 	DOCKER_IMAGE_VERSION=0.0.5.arm64 docker stack deploy --with-registry-auth -c docker-compose-airflow.yml airflow
 	DOCKER_IMAGE_VERSION=0.0.6.gce docker stack deploy --with-registry-auth -c docker-compose-airflow.yml airflow
+	DOCKER_IMAGE_VERSION=0.0.7 docker stack deploy --with-registry-auth -c docker-compose-airflow.yml airflow
 
 ## 調整筆電 gcloud project
     gcloud config set project airflow-466005
