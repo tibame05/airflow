@@ -17,7 +17,7 @@ def create_producer_task_tw() -> DockerOperator:
         auto_remove=True,
         # ✅ 指定容器要使用的 Docker network 名稱
         # 注意：這要是 Docker Engine 中已存在的 network 名稱
-        network_mode="my_swarm_network",
+        network_mode="etf_lib_network",
     )
 
 # 建立一個 DockerOperator 任務的函式，回傳一個 Airflow 的任務實例
@@ -33,5 +33,5 @@ def create_producer_task_us() -> DockerOperator:
         auto_remove=True,
         # ✅ 指定容器要使用的 Docker network 名稱
         # 注意：這要是 Docker Engine 中已存在的 network 名稱
-        network_mode="my_swarm_network",
+        network_mode="etf_lib_network",
     )
