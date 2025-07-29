@@ -3,7 +3,7 @@ version: '3.0'
 services:
   # 初始化 Airflow 資料庫
   initdb:
-    image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}  # 使用指定版本的自定義映像
+    image: peiyuji/tibame_dataflow:${DOCKER_IMAGE_VERSION}  # 使用指定版本的自定義映像
     command: pipenv run airflow db init  # 初始化 Airflow 的 metadata DB
     restart: on-failure  # 若失敗則自動重啟
     deploy:

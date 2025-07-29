@@ -107,7 +107,7 @@ services:
       - etf_lib_network
 
   worker:
-    image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+    image: peiyuji/tibame_dataflow:${DOCKER_IMAGE_VERSION}
     hostname: "{{.Service.Name}}.{{.Task.Slot}}"
     restart: always
     # 將容器內的 docker 與容器外的 docker 做連結
