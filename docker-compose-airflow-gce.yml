@@ -16,7 +16,7 @@ services:
 
   # 建立 Airflow 使用者
   create-user:
-    image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}  # 同一映像
+    image: peiyuji/tibame_dataflow:${DOCKER_IMAGE_VERSION}  # 同一映像
     command: pipenv run airflow users create --username admin --firstname lin --lastname sam --role Admin -p admin --email finmind.tw@gmail.com  # 建立管理者帳號
     depends_on:
       - initdb  # 等待 initdb 完成後再執行
@@ -50,7 +50,7 @@ services:
 
   # Airflow Web UI 介面
   webserver:
-    image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+    image: peiyuji/tibame_dataflow:${DOCKER_IMAGE_VERSION}
     hostname: "airflow-webserver"  # 指定主機名稱
     command: pipenv run airflow webserver -p 5000  # 啟動 webserver，使用 5000 port
     depends_on:
@@ -89,7 +89,7 @@ services:
   
   # Airflow 排程器，負責執行 DAG 任務
   scheduler:
-    image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+    image: peiyuji/tibame_dataflow:${DOCKER_IMAGE_VERSION}
     hostname: "airflow-scheduler"
     command: pipenv run airflow scheduler  # 啟動 scheduler
     depends_on:
@@ -111,7 +111,7 @@ services:
       - etf_lib_network
 
   worker:
-    image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+    image: peiyuji/tibame_dataflow:${DOCKER_IMAGE_VERSION}
     hostname: "{{.Service.Name}}.{{.Task.Slot}}"
     restart: always
     environment:
@@ -134,7 +134,7 @@ services:
         - etf_lib_network
 
   crawler_twse:
-    image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+    image: peiyuji/tibame_dataflow:${DOCKER_IMAGE_VERSION}
     hostname: "{{.Service.Name}}.{{.Task.Slot}}"
     restart: always
     environment:
@@ -157,7 +157,7 @@ services:
         - etf_lib_network
 
   crawler_tpex:
-    image: tibame05/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+    image: peiyuji/tibame_dataflow:${DOCKER_IMAGE_VERSION}
     hostname: "{{.Service.Name}}.{{.Task.Slot}}"
     restart: always
     environment:
