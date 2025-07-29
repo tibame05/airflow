@@ -4,12 +4,12 @@ from airflow.operators.docker_operator import (
 )
 
 
-# 建立一個 DockerOperator 任務的函式，回傳一個 Airflow 的任務實例
+# 建立一個 PythonOperator 任務，將上述 crawler 函式包裝成 DAG 中的一個任務
 def create_producer_task_tw() -> DockerOperator:
     return DockerOperator(
         # 設定這個 task 在 DAG 中的名稱（唯一識別碼）
         task_id="producer_main_tw",
-        image="tibame05/tibame_crawler:0.0.5",
+        image="peiyuji/tibame_crawler:0.0.7",
         command="pipenv run python crawler/producer_main_tw.py",
         # 每次執行前都強制重新拉取最新的 image（確保使用最新版本）
         force_pull=True,
@@ -25,7 +25,7 @@ def create_producer_task_us() -> DockerOperator:
     return DockerOperator(
         # 設定這個 task 在 DAG 中的名稱（唯一識別碼）
         task_id="producer_main_us",
-        image="tibame05/tibame_crawler:0.0.5",
+        image="peiyuji/tibame_crawler:0.0.7",
         command="pipenv run python crawler/producer_main_us.py",
         # 每次執行前都強制重新拉取最新的 image（確保使用最新版本）
         force_pull=True,

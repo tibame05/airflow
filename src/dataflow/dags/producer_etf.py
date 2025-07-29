@@ -34,7 +34,3 @@ with airflow.DAG(
     tw_task = create_producer_task_tw()
     us_task = create_producer_task_us()
     tw_task >> us_task
-
-    #create_producer_task_tw()
-    #create_producer_task_us()
-    #create_producer_task_tw >> create_producer_task_us
