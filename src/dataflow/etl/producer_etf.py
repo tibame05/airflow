@@ -4,7 +4,7 @@ from airflow.operators.docker_operator import (
 )
 
 
-# 建立一個 PythonOperator 任務，將上述 crawler 函式包裝成 DAG 中的一個任務
+# 建立一個 DockerOperator 任務的函式，回傳一個 Airflow 的任務實例
 def create_producer_task_tw() -> DockerOperator:
     return DockerOperator(
         # 設定這個 task 在 DAG 中的名稱（唯一識別碼）
