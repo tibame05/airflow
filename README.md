@@ -40,6 +40,8 @@
     docker build -f with.env.Dockerfile -t peiyuji/tibame_dataflow:0.0.5.arm64 .
     docker build -f gce.with.env.Dockerfile -t peiyuji/tibame_dataflow:0.0.6.gce .
     docker build -f with.env.Dockerfile -t peiyuji/tibame_dataflow:0.0.7 .
+    docker build -f with.env.Dockerfile -t peiyuji/tibame_dataflow:0.0.8 .
+
 
 #### push docker image
 
