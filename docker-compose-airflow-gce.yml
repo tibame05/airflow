@@ -3,7 +3,7 @@ version: '3.0'
 services:
   # 初始化 Airflow 資料庫
   initdb:
-    image: peiyuji/tibame_dataflow:${DOCKER_IMAGE_VERSION}  # 使用指定版本的自定義映像
+    image: ${DOCKER_IMAGE}  # 使用指定版本的自定義映像
     command: pipenv run airflow db init  # 初始化 Airflow 的 metadata DB
     restart: on-failure  # 若失敗則自動重啟
     deploy:
@@ -16,7 +16,7 @@ services:
 
   # 建立 Airflow 使用者
   create-user:
-    image: peiyuji/tibame_dataflow:${DOCKER_IMAGE_VERSION}  # 同一映像
+    image: ${DOCKER_IMAGE}  # 同一映像
     command: pipenv run airflow users create --username admin --firstname lin --lastname sam --role Admin -p admin --email finmind.tw@gmail.com  # 建立管理者帳號
     depends_on:
       - initdb  # 等待 initdb 完成後再執行
@@ -50,7 +50,7 @@ services:
 
   # Airflow Web UI 介面
   webserver:
-    image: peiyuji/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+    image: ${DOCKER_IMAGE}
     hostname: "airflow-webserver"  # 指定主機名稱
     command: pipenv run airflow webserver -p 5000  # 啟動 webserver，使用 5000 port
     depends_on:
@@ -89,7 +89,7 @@ services:
   
   # Airflow 排程器，負責執行 DAG 任務
   scheduler:
-    image: peiyuji/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+    image: ${DOCKER_IMAGE}
     hostname: "airflow-scheduler"
     command: pipenv run airflow scheduler  # 啟動 scheduler
     depends_on:
@@ -101,7 +101,7 @@ services:
       - TZ=Asia/Taipei
     # 將容器內的 docker 與容器外的 docker 做連結
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      # - /var/run/docker.sock:/var/run/docker.sock
     deploy:
       mode: replicated
       replicas: 1
@@ -110,8 +110,8 @@ services:
     networks:
       - etf_lib_network
 
-  worker:
-    image: peiyuji/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+  airflow_worker_crawler_tw:
+    image: ${DOCKER_IMAGE}
     hostname: "{{.Service.Name}}.{{.Task.Slot}}"
     restart: always
     environment:
@@ -123,18 +123,19 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - scheduler
-    command: pipenv run airflow celery worker
+    command: pipenv run airflow celery worker -q crawler_tw
     # swarm 設定
     deploy:
       mode: replicated
       replicas: 1
       placement:
-        constraints: [node.labels.worker == true]
+        # 爬蟲 producer container(DockerOperator) 會跑在 Airflow Worker 所在的 VM 上
+        constraints: [node.labels.producer == true]
     networks:
         - etf_lib_network
 
-  crawler_twse:
-    image: peiyuji/tibame_dataflow:${DOCKER_IMAGE_VERSION}
+  airflow_worker_crawler_us:
+    image: ${DOCKER_IMAGE}
     hostname: "{{.Service.Name}}.{{.Task.Slot}}"
     restart: always
     environment:
@@ -146,36 +147,14 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - scheduler
-    command: pipenv run airflow celery worker -q twse
+    command: pipenv run airflow celery worker -q crawler_us
     # swarm 設定
     deploy:
       mode: replicated
       replicas: 1
       placement:
-        constraints: [node.labels.airflow == true]
-    networks:
-        - etf_lib_network
-
-  crawler_tpex:
-    image: peiyuji/tibame_dataflow:${DOCKER_IMAGE_VERSION}
-    hostname: "{{.Service.Name}}.{{.Task.Slot}}"
-    restart: always
-    environment:
-      - AIRFLOW__WEBSERVER__WEB_SERVER_NAME=airflow
-      - AIRFLOW__WEBSERVER__INSTANCE_NAME=airflow
-      - TZ=Asia/Taipei
-    # 將容器內的 docker 與容器外的 docker 做連結
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - scheduler
-    command: pipenv run airflow celery worker -q tpex
-    # swarm 設定
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints: [node.labels.airflow == true]
+        # 爬蟲 producer container(DockerOperator) 會跑在 Airflow Worker 所在的 VM 上
+        constraints: [node.labels.producer == true]
     networks:
         - etf_lib_network
 

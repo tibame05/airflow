@@ -17,8 +17,9 @@ apache-airflow-providers-celery = "==3.6.0"
 apache-airflow-providers-google = "==10.17.0"
 google-cloud-storage = "==2.16.0"
 flask-session = "==0.5.0"
+mysql-connector-python = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.8"
+python_version = "3.9"

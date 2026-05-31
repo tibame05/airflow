@@ -13,18 +13,17 @@ from dataflow.constant import (
 from dataflow.etl.producer_etf import (
     # 建立並回傳一個 DockerOperator 任務
     create_producer_task_tw,
-    create_producer_task_us
 )
 
 # 定義 DAG，並用 with 語法將任務放入 DAG 環境中
 with airflow.DAG(
     # DAG 的唯一名稱，用來識別 DAG
-    dag_id="Producer",
+    dag_id="Producer_tw",
     # 套用預設參數設定
     default_args=DEFAULT_ARGS,
-    # 不自動排程，只能手動或外部觸發
-    schedule_interval=None,
-    # 限制同時執行的最大 DAG 實例數
+    # 每天 17:30 執行一次（Asia/Taipei，見 airflow-gce.cfg default_timezone）
+    schedule_interval="30 17 * * *",
+    # 限制此 DAG 同時執行的最大實例數
     max_active_runs=MAX_ACTIVE_RUNS,
     # 禁止補跑過去未執行的排程
     catchup=False,
@@ -32,5 +31,4 @@ with airflow.DAG(
     # 建立並註冊 DockerOperator 任務到 DAG
 
     tw_task = create_producer_task_tw()
-    us_task = create_producer_task_us()
-    tw_task >> us_task
+    tw_task
